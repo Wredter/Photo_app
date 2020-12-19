@@ -6,12 +6,13 @@ from argparse import ArgumentParser
 
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
-
-face_detector = cv2.CascadeClassifier('xml_detectors\\haarcascades\\haarcascade_frontalface_default.xml')
-eye_detector_1 = cv2.CascadeClassifier('xml_detectors\\haarcascades\\haarcascade_eye_tree_eyeglasses.xml')
-eye_detector_2 = cv2.CascadeClassifier('xml_detectors\\haarcascades\\haarcascade_eye.xml')
-eye_detector_3 = cv2.CascadeClassifier('xml_detectors\\haarcascades\\haarcascade_lefteye_2splits.xml')
-smile_detector = cv2.CascadeClassifier('xml_detectors\\haarcascades\\haarcascade_smile.xml')
+import pathlib
+pathlib.Path(__file__).parent.absolute()
+face_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
+eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye.xml')
+eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
+smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
 args = parser.parse_args()
 img_path = args.path
 img_open = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
