@@ -3,18 +3,35 @@ import itertools as it
 import numpy as np
 from Tools import save_json
 from argparse import ArgumentParser
+import os 
+
 
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
+parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
 import pathlib
 pathlib.Path(__file__).parent.absolute()
-face_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
-eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
-eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye.xml')
-eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
-smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
+# os.system("pwd")
+# os.system("ls")
+# os.system("ls /app/")
+
+# face_detector =  cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
+# eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+# eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye.xml')
+# eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
+# smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
+
+
+face_detector =  cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
+eye_detector_1 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+eye_detector_2 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye.xml')
+eye_detector_3 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
+smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
+
 args = parser.parse_args()
 img_path = args.path
+output_path = args.outputPath
+
 img_open = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
 # img_open2 = cv2.imread('Data\\CV_photo.jpg', cv2.IMREAD_UNCHANGED)
 # img_closed = cv2.imread('Data\\IMG_20201216_185903.jpg', cv2.IMREAD_UNCHANGED)
@@ -107,3 +124,6 @@ for (x, y, w, h) in face:
 
 cv2.imwrite('Detected.jpg', resized_img)
 save_json(Face, Eyes, Smile)
+output_path = output_path.replace("inputfile", "outputfile.json")
+copyCommand = "mv" + " ./output.json " + output_path
+os.system(copyCommand)
