@@ -1,6 +1,7 @@
 import web
 import os 
 import time;
+import json
 
 urls = (
     '/', 'Index',
@@ -8,7 +9,7 @@ urls = (
     '/result', 'Result'
 )
 
-lastOutputJson = "none"
+lastOutputJson = "nofile.json"
 
 class Index:
     def GET(self):
@@ -17,7 +18,15 @@ class Index:
 
 class Result:
     def GET(self):
-        return "Result"
+        print(lastOutputJson)
+        with open(lastOutputJson) as json_file:
+            data = json.load(json_file)
+            return json.dumps(data)
+
+        # with open('lastOutputJson', 'r') as outfile:
+            print(str(json_file))
+        return "Result!"
+
 
 
 
@@ -40,8 +49,8 @@ class Upload:
     # ??    web.debug(x['myfile'].value) # This is the file contents
         print("HI___________WAIT...")
 
-        # filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
         # filedir = '/home/zombie/data/minio/photo' # Azure VM
+        # filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
         filedir = '/data/minio/photo' # Container
         
         timestamp = str(int(time.time()))
@@ -56,13 +65,16 @@ class Upload:
             fout.write(x.myfile.file.read()) # writes the uploaded file to the newly created file.
             fout.close() # closes the file, upload complete.
         print(wholeFilepath)    
-        lastOutputJson = str('/data/minio/photo/'+timestamp+"/inputfile")    
+        global lastOutputJson
+        lastOutputJson = '/data/minio/photo/'+timestamp+"/inputfile"    
+        lastOutputJson = lastOutputJson.replace("inputfile", "outputfile.json")
+        print("output path:::: ")
         print(lastOutputJson)    
-        newFilepath = wholeFilepath.replace("inputfile", "outputfile.json")
 
-        print(newFilepath)
+        # print(newFilepath)
         # print(newFilepath.replace("inputfile", "outputfile.json"))
-        runFaceRecognitionCommand = str("python /app/Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+        runFaceRecognitionCommand = str("python3 /app/Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+        print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
         # os.system("python ./Start.py -f newFilepath -o lastOutputJson")
         # os.system("python /app/Wait.py -t 1")
