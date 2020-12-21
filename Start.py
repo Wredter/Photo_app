@@ -45,6 +45,7 @@ face = face_detector.detectMultiScale(gray_img, 1.2, 5)
 print("Ending Detection")
 if len(face) is not 1:
     save_json(Face, Eyes, Smile)
+    cv2.imwrite('Detected.jpg', resized_img)
     print("NO FACE DETECTED")
     exit(0)
 
@@ -80,7 +81,7 @@ for (x, y, w, h) in face:
         else:
             remove.append(True)
     eye_pairs = list(it.compress(eye_pairs, remove))
-    if len(eye_pairs) is 1:
+    if len(eye_pairs) == 1:
         Eyes = True
         center_min = min(eye_pairs[0][0][0]+(eye_pairs[0][0][2]/2), eye_pairs[0][1][0]+(eye_pairs[0][1][2]/2))
         center_max = max(eye_pairs[0][0][0] + (eye_pairs[0][0][2] / 2), eye_pairs[0][1][0] + (eye_pairs[0][1][2] / 2))
